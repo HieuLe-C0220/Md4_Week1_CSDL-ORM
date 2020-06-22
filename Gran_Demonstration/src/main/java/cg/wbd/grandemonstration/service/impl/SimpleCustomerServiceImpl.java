@@ -68,7 +68,7 @@ public class SimpleCustomerServiceImpl implements CustomerService {
             origin.setName(customer.getName());
             origin.setEmail(customer.getEmail());
             origin.setAddress(customer.getAddress());
-            session.save(origin);
+            session.saveOrUpdate(origin);
             transaction.commit();
             return origin;
         } catch (Exception e){
@@ -126,6 +126,11 @@ public class SimpleCustomerServiceImpl implements CustomerService {
     @Override
     public void deleteAll() {
         customers = new ArrayList<>();
+    }
+
+    @Override
+    public void create(Customer customer) {
+
     }
 
     private Customer persist(Customer customer) {

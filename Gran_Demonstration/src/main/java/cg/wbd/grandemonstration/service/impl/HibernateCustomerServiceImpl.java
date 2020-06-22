@@ -62,6 +62,12 @@ public class HibernateCustomerServiceImpl implements CustomerService {
     public void deleteAll() {
 
     }
+
+    @Override
+    public void create(Customer customer) {
+
+    }
+
     @Bean
     public CustomerService customerService() {
         return new HibernateCustomerServiceImpl();

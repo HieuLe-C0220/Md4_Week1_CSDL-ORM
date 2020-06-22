@@ -4,31 +4,27 @@ import cg.wbd.grandemonstration.model.Customer;
 import cg.wbd.grandemonstration.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("customers")
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping
+    @GetMapping("/customers")
     public ModelAndView showList() {
-        ModelAndView modelAndView = new ModelAndView("customers/list");
+        ModelAndView modelAndView = new ModelAndView("list");
         List<Customer> customers = customerService.findAll();
         modelAndView.addObject("customers", customers);
         return modelAndView;
     }
 
-    @GetMapping("{id}")
+    @RequestMapping("/customers/{id}")
     public ModelAndView showInformation(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("customers/info");
+        ModelAndView modelAndView = new ModelAndView("info");
         Customer customer = customerService.findOne(id);
         modelAndView.addObject("customer", customer);
         return modelAndView;
@@ -37,6 +33,27 @@ public class CustomerController {
     @PostMapping
     public String updateCustomer(Customer customer) {
         customerService.save(customer);
+        return "redirect:/customers";
+    }
+    @GetMapping("/delete/{id}")
+    public ModelAndView showDeleteInformation(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("delete");
+        Customer customer = customerService.findOne(id);
+        modelAndView.addObject("customer",customer);
+        return modelAndView;
+    }
+    @PostMapping("/delete")
+    public String delete(@ModelAttribute Customer customer){
+        customerService.delete(customer.getId());
+        return "redirect:/customers";
+    }
+    @GetMapping("create_form")
+    public String getCreateForm() {
+        return "create";
+    }
+    @PostMapping("/create")
+    public String createCustomer(@ModelAttribute Customer customer) {
+        customerService.create(customer);
         return "redirect:/customers";
     }
 }
